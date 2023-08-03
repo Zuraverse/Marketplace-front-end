@@ -1,0 +1,51 @@
+body {
+    // background-color: black !important;
+    color: #fff !important;
+  }
+.btn-primary{
+  background: #394bf2;
+  color: #fff;
+  font-size: 24px;
+  border-radius: 4px;
+  margin-left: 32px;
+  padding: 5px 22px;
+  border: 2px solid #394bf2;
+}
+.float-right{
+  float: right;
+}
+.notification-btn{
+  padding: 5px 10px;
+}
+.pr-4{
+  padding-right: 8px;
+}
+.wallet-btn{
+  padding: 5px 10px;
+}
+@media only screen and (max-width: 600px){
+  .mintWrapper .mint-box p {
+    font-size: 22px;
+}
+	.btn-primary{
+    margin-left:4px;
+   
+  }
+  .sm-hidden{
+    display: none;
+  }
+  .mintWrapper .mint-box .text-wrapper {
+    padding: 31px !important;
+  }
+  .mintWrapper .mint-box .btn-join {
+    background: #00000091;
+}
+.mintWrapper .mint-box h2 {
+  margin-top: 60px;
+  font-size: 39px;
+}
+}
+.btn-success{
+  margin-left: 30px !important;
+ 
+}

@@ -1,0 +1,13 @@
+.css-12i7wg6-MuiPaper-root-MuiDrawer-paper{
+    border-right: none !important;
+}
+.css-10hburv-MuiTypography-root{
+    font-family: "Poppins" !important;
+    letter-spacing: 0.5px !important;
+}
+.css-d9ml5t-MuiDrawer-docked .MuiDrawer-paper,.css-1r7kz78-MuiModal-root-MuiDrawer-root .MuiDrawer-paper{
+    justify-content: space-between !important;
+}
+body{
+    /* background-color: #ffffff!important; */
+}
