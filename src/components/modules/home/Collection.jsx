@@ -5,18 +5,20 @@ import DP from "../../../assets/images/banner/DP1.png";
 import { FiFilter, FiRefreshCcw } from "react-icons/fi";
 import { BsFillGrid3X3GapFill, BsGridFill } from "react-icons/bs";
 import { AiOutlineSearch } from "react-icons/ai";
-import {useAccount } from "wagmi";
+import { useAccount } from "wagmi";
 import HeaderCommon from "./HeaderCommon";
 import { mintAddress } from "../../../blockchain/contractDetails";
 import { getAllNftData } from "../../../slices/ipfsData";
-import {getBalance,getBlockChainName} from "../../../slices/utilsSilce";
+import { getBalance, getBlockChainName } from "../../../slices/utilsSilce";
 import WagmiUtils from "../../../blockchain/wagmiUtils";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import YourApp from "./MyApp";
 import { handleMintNft } from "../../../slices/contractSetterSlice";
-import { getMerkleRoot } from "../../../slices/contractGetterSlice";
-
-
+import {
+  getContractGetterFunc,
+  getMerkleRoot,
+} from "../../../slices/contractGetterSlice";
+import { getMerkleProof } from "../../../slices/backened";
 
 const Collection = () => {
   const { openConnectModal } = useConnectModal();
@@ -25,10 +27,13 @@ const Collection = () => {
   // const [merkleRoot1, setMerkleRoot1] = useState("");
   const mintedMan = mintAddress.filter((obj) => obj.address1 === address);
 
-  const {merkleRoot} = useSelector((state) => state.getterFunc);
+  const { mintFrom, mintUpto } = useSelector((state) => state.getterFunc);
+  const { merkleProof } = useSelector((state) => state.backenedFunc);
 
   const [activeButton, setActiveButton] = useState("button1");
   const [searchTerm, setSearchTerm] = useState("");
+  const [mintFromNfts, setMintFromNfts] = useState(null);
+  const [mintUptoNfts, setMintUptoNfts] = useState(null);
 
   const dispatch = useDispatch();
   const { allNftData } = useSelector((state) => state.custom);
@@ -46,13 +51,21 @@ const Collection = () => {
       item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
- 
-  
+  useEffect(() => {
+    dispatch(getContractGetterFunc())
+      .then(() => setMintFromNfts(mintFrom))
+      .then(() => setMintUptoNfts(mintUpto));
+  }, [dispatch,mintFrom,mintUpto]);
+  useEffect(() => {
+    if ((mintUptoNfts, mintFromNfts)) {
+      dispatch(
+        getAllNftData({ mintFrom: mintFromNfts, mintUpto: mintUptoNfts })
+      );
+    }
+  }, [mintUptoNfts, mintFromNfts]);
 
   useEffect(() => {
-    dispatch(getAllNftData());
-    if(isConnected){
+    if (isConnected) {
       dispatch(getBlockChainName());
       dispatch(getBalance(address));
       dispatch(getMerkleRoot());
@@ -62,10 +75,12 @@ const Collection = () => {
     }
   }, [dispatch]);
 
-  
+  console.log(mintFromNfts, mintUptoNfts);
 
-
-
+  const handleMint = async (tokenId) => {
+    await dispatch(getMerkleProof({ address }));
+    handleMintNft({ tokenId, address, merkleProof });
+  };
 
   return (
     <>
@@ -244,9 +259,14 @@ const Collection = () => {
                   <div className="collection_small_box">
                     <div className="collection_small_box_connect_wallet">
                       {!isConnected ? (
-                        <WagmiUtils compo={<YourApp classes="button"/>}/>
+                        <WagmiUtils compo={<YourApp classes="button" />} />
                       ) : mintAllowed ? (
-                        <button className="button" onClick={()=>handleMintNft(merkleRoot)}>Mint Now</button>
+                        <button
+                          className="button"
+                          onClick={() => handleMint(item.edition)}
+                        >
+                          Mint Now
+                        </button>
                       ) : (
                         <button className="button No_Whitelist">
                           No Whitelist

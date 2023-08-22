@@ -3,16 +3,42 @@ export const contractDetails = {
 	HACK: {
 		name: 'HACK',
 		tokenImage: 'token icon image path',
-		abi:  [
+		abi: [
             {
                 "inputs": [
                     {
                         "internalType": "bool",
-                        "name": "_allow",
+                        "name": "_pause",
                         "type": "bool"
                     }
                 ],
-                "name": "allowMinting",
+                "name": "allowPaidMinting",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "bool",
+                        "name": "_pause",
+                        "type": "bool"
+                    }
+                ],
+                "name": "allowSpecialMinting",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "bool",
+                        "name": "_pause",
+                        "type": "bool"
+                    }
+                ],
+                "name": "allowWhitelistMinting",
                 "outputs": [],
                 "stateMutability": "nonpayable",
                 "type": "function"
@@ -21,7 +47,7 @@ export const contractDetails = {
                 "inputs": [
                     {
                         "internalType": "uint256",
-                        "name": "_freeLimit",
+                        "name": "maxWhitelistNfts",
                         "type": "uint256"
                     },
                     {
@@ -31,12 +57,7 @@ export const contractDetails = {
                     },
                     {
                         "internalType": "uint256",
-                        "name": "_maxToken",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "_freeLimitPeriod",
+                        "name": "_maxAmount",
                         "type": "uint256"
                     }
                 ],
@@ -112,11 +133,30 @@ export const contractDetails = {
                 "type": "function"
             },
             {
+                "anonymous": false,
                 "inputs": [
                     {
-                        "internalType": "address",
-                        "name": "to",
-                        "type": "address"
+                        "indexed": false,
+                        "internalType": "uint256",
+                        "name": "_fromTokenId",
+                        "type": "uint256"
+                    },
+                    {
+                        "indexed": false,
+                        "internalType": "uint256",
+                        "name": "_toTokenId",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "BatchMetadataUpdate",
+                "type": "event"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "currentTokenId",
+                        "type": "uint256"
                     },
                     {
                         "internalType": "string",
@@ -135,7 +175,25 @@ export const contractDetails = {
                 "type": "function"
             },
             {
+                "anonymous": false,
                 "inputs": [
+                    {
+                        "indexed": false,
+                        "internalType": "uint256",
+                        "name": "_tokenId",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "MetadataUpdate",
+                "type": "event"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "currentTokenId",
+                        "type": "uint256"
+                    },
                     {
                         "internalType": "string",
                         "name": "uri",
@@ -143,13 +201,7 @@ export const contractDetails = {
                     }
                 ],
                 "name": "mint",
-                "outputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
-                    }
-                ],
+                "outputs": [],
                 "stateMutability": "payable",
                 "type": "function"
             },
@@ -170,26 +222,6 @@ export const contractDetails = {
                     }
                 ],
                 "name": "OwnershipTransferred",
-                "type": "event"
-            },
-            {
-                "inputs": [],
-                "name": "pause",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "anonymous": false,
-                "inputs": [
-                    {
-                        "indexed": false,
-                        "internalType": "address",
-                        "name": "account",
-                        "type": "address"
-                    }
-                ],
-                "name": "Paused",
                 "type": "event"
             },
             {
@@ -271,19 +303,6 @@ export const contractDetails = {
             {
                 "inputs": [
                     {
-                        "internalType": "uint256",
-                        "name": "_maxMints",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "setMaxMintPerRound",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
                         "internalType": "bytes32",
                         "name": "_merkleRoot",
                         "type": "bytes32"
@@ -292,6 +311,47 @@ export const contractDetails = {
                 "name": "setMerkleRoot",
                 "outputs": [],
                 "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "_from",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "_upto",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "setMintIdsPerRound",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "currentTokenId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "uri",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "bytes32[]",
+                        "name": "_merkleProof",
+                        "type": "bytes32[]"
+                    }
+                ],
+                "name": "specialMint",
+                "outputs": [],
+                "stateMutability": "payable",
                 "type": "function"
             },
             {
@@ -356,26 +416,6 @@ export const contractDetails = {
                 "type": "function"
             },
             {
-                "inputs": [],
-                "name": "unpause",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "anonymous": false,
-                "inputs": [
-                    {
-                        "indexed": false,
-                        "internalType": "address",
-                        "name": "account",
-                        "type": "address"
-                    }
-                ],
-                "name": "Unpaused",
-                "type": "event"
-            },
-            {
                 "inputs": [
                     {
                         "internalType": "uint256",
@@ -385,7 +425,20 @@ export const contractDetails = {
                 ],
                 "name": "updateListPrice",
                 "outputs": [],
-                "stateMutability": "payable",
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "_price",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "updateSpecialPrice",
+                "outputs": [],
+                "stateMutability": "nonpayable",
                 "type": "function"
             },
             {
@@ -428,7 +481,7 @@ export const contractDetails = {
             },
             {
                 "inputs": [],
-                "name": "getFreeLimit",
+                "name": "getListPrice",
                 "outputs": [
                     {
                         "internalType": "uint256",
@@ -441,7 +494,7 @@ export const contractDetails = {
             },
             {
                 "inputs": [],
-                "name": "getListprice",
+                "name": "getMaxWhitelist",
                 "outputs": [
                     {
                         "internalType": "uint256",
@@ -460,6 +513,82 @@ export const contractDetails = {
                         "internalType": "bytes32",
                         "name": "",
                         "type": "bytes32"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "getMintFromId",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "getMintIdsPerRound",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "getMintUptoId",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "getSpecialPrice",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "tokenId",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "gettokenMintStatus",
+                "outputs": [
+                    {
+                        "internalType": "bool",
+                        "name": "",
+                        "type": "bool"
                     }
                 ],
                 "stateMutability": "view",
@@ -491,7 +620,7 @@ export const contractDetails = {
             },
             {
                 "inputs": [],
-                "name": "isFreeLimitPeriodOver",
+                "name": "isPaidMintAllowed",
                 "outputs": [
                     {
                         "internalType": "bool",
@@ -504,7 +633,7 @@ export const contractDetails = {
             },
             {
                 "inputs": [],
-                "name": "isMintAllowed",
+                "name": "isSpecialMintAllowed",
                 "outputs": [
                     {
                         "internalType": "bool",
@@ -517,12 +646,12 @@ export const contractDetails = {
             },
             {
                 "inputs": [],
-                "name": "mintInstallemntcounter",
+                "name": "isWhitelistMintAllowed",
                 "outputs": [
                     {
-                        "internalType": "uint256",
+                        "internalType": "bool",
                         "name": "",
-                        "type": "uint256"
+                        "type": "bool"
                     }
                 ],
                 "stateMutability": "view",
@@ -574,8 +703,14 @@ export const contractDetails = {
                 "type": "function"
             },
             {
-                "inputs": [],
-                "name": "paused",
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "name": "specialMintClaimed",
                 "outputs": [
                     {
                         "internalType": "bool",
@@ -709,6 +844,25 @@ export const contractDetails = {
             {
                 "inputs": [
                     {
+                        "internalType": "bytes32[]",
+                        "name": "_merkleProof",
+                        "type": "bytes32[]"
+                    }
+                ],
+                "name": "userWhitelisted",
+                "outputs": [
+                    {
+                        "internalType": "bool",
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
                         "internalType": "address",
                         "name": "",
                         "type": "address"
@@ -808,6 +962,11 @@ export const mintAddress = [
     },
     {
         address1:"0xf387229980fFCC03300f10aa229b9A2be5ab1D40",
+        uri:"/uri/1",
+        data:["0x944575a0dec849c8e8c640c517c9302ec7c6b6f0f5d57bd8e03923288ce82c0c","0x22dd82887fca6ada6d634a66fc58f8d16fc99d06c2a307ff7467a2e836105ef7"]
+    },
+    {
+        address1:"0xe36051f8bF9498D2Ac7506D8cc40DB60D6E70571",
         uri:"/uri/1",
         data:["0x944575a0dec849c8e8c640c517c9302ec7c6b6f0f5d57bd8e03923288ce82c0c","0x22dd82887fca6ada6d634a66fc58f8d16fc99d06c2a307ff7467a2e836105ef7"]
     },

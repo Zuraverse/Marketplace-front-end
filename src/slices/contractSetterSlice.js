@@ -2,6 +2,8 @@ import { ethers } from "ethers";
 import abi from "../blockchain/abi.json"
 import { ByteCode } from "../blockchain/byteCode";
 import AlertComponent from "../sharedComponent/Alert";
+import { useDispatch } from "react-redux";
+import { backenedSlice, getMerkleProof } from "./backened";
 
 let provider;
 if (typeof window.ethereum !== 'undefined') {
@@ -13,7 +15,7 @@ if (typeof window.ethereum !== 'undefined') {
     provider = new ethers.providers.JsonRpcProvider();
 }
 const signer = provider.getSigner();
-const contractAddress = "0x78728b5754724551e86fd91E73e1666Ad386A0e7"
+const contractAddress = "0xB9c96EC68Ef993c817513ca0d6009d0f093Ac609"
 const contract = new ethers.Contract(contractAddress, abi, signer);
 
 
@@ -100,20 +102,19 @@ export const setCurrentNftPriceFunc = async (data) => {
     }
 }
 
-export const handleMintNft = async (merkleRoot) => {
-    const tokenId = 1;
-    const uri = "https://bafybeibcm4jp3cdchok6wf2t4jyx3g2qljavnpsjmq3ip3fednayle4yoy.ipfs.dweb.link/1.json";
-    const proof = [
-        "0xbe174fd7e07bf79075c9914efe8253e46f147a0483a957547b08c1b06eef3b5f",
-        "0x2188be489f1df039a314a2e54579cf206d770d3be7ad48ef2a8d2c5f0ea192b6",
-        "0x80eeffe818197df2cad09cc3b7341db1744ab18280491e38017ec22cd05a222a"
-      ] 
-    // console.log(merkleRoot)
+export const handleMintNft = async ({tokenId,address,merkleProof}) => {
+    console.log(address)
+    console.log(merkleProof)
+    const uri = `https://bafybeibcm4jp3cdchok6wf2t4jyx3g2qljavnpsjmq3ip3fednayle4yoy.ipfs.dweb.link/${tokenId}.json`;
+    
+
+
     try {
-        const tx = await contract.freeMint(tokenId, uri,proof);
+        const tx = await contract.freeMint(tokenId, uri, merkleProof);
         await tx.wait();
+        // return { type: "success", message: "NFT minted successfully!" }
         console.log('NFT minted successfully!');
     } catch (error) {
-        console.error('Error minting NFT:', error);
+        return { type: "error", message: error.reason }
     }
 }

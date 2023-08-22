@@ -14,7 +14,7 @@ if (typeof window.ethereum !== 'undefined') {
 }
 
 const signer = provider.getSigner();
-let contractAddress = "0x78728b5754724551e86fd91E73e1666Ad386A0e7"
+let contractAddress = "0xB9c96EC68Ef993c817513ca0d6009d0f093Ac609"
 let contract = new ethers.Contract(contractAddress, abi, signer);
 
 export const getContractGetterFunc = createAsyncThunk('contract/getValue', async (address) => {
@@ -40,9 +40,12 @@ export const getContractGetterFunc = createAsyncThunk('contract/getValue', async
 
     const totalTokensMintedBigNo = await contract.totalTokensMinted();
     const totalTokensMinted = ethers.BigNumber.from(totalTokensMintedBigNo).toNumber();
+    
+    const maxWhitelistedNftsBigNo = await contract.getMaxWhitelist();
+    const maxWhitelistedNfts = ethers.BigNumber.from(maxWhitelistedNftsBigNo).toNumber();
     return {
         paidMintAllowed, whitelistMintAllowed, specialMintAllowed, listPrice, specialPrice, mintFrom, mintUpto,
-        maxWhitelist, totalTokensMinted,
+        maxWhitelist, totalTokensMinted,maxWhitelistedNfts
     };
 })
 export const getMerkleRoot = createAsyncThunk('contract/getMerkleRoot', async (address) => {
@@ -63,13 +66,14 @@ export const getterSlice = createSlice({
         mintUpto: null,
         maxWhitelist: null,
         totalTokensMinted: null,
+        maxWhitelistedNfts: null,
     },
     extraReducers: (builder) => {
         builder
             .addCase(getContractGetterFunc.fulfilled, (state, action) => {
                 const {
                     paidMintAllowed, whitelistMintAllowed, specialMintAllowed, listPrice, specialPrice, mintFrom, mintUpto,
-                    maxWhitelist, totalTokensMinted,
+                    maxWhitelist, totalTokensMinted,maxWhitelistedNfts
                 } = action.payload;
                 state.paidMintAllowed = paidMintAllowed;
                 state.whitelistMintAllowed = whitelistMintAllowed;
@@ -80,6 +84,7 @@ export const getterSlice = createSlice({
                 state.mintUpto = mintUpto;
                 state.maxWhitelist = maxWhitelist;
                 state.totalTokensMinted = totalTokensMinted;
+                state.maxWhitelistedNfts = maxWhitelistedNfts;
             })
             .addCase(getMerkleRoot.fulfilled, (state, action) => {
                 state.merkleRoot = action.payload

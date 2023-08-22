@@ -7,11 +7,13 @@ const getUrl = (id) => {
     return
 }
 
-export const getAllNftData = createAsyncThunk("getAllNftData", async () => {
+export const getAllNftData = createAsyncThunk("getAllNftData", async ({mintFrom,mintUpto }) => {
     const baseUrl = "https://bafybeibcm4jp3cdchok6wf2t4jyx3g2qljavnpsjmq3ip3fednayle4yoy.ipfs.dweb.link/";
-    const totalSupply = 20
+    // const totalSupply = 20
+    console.log(mintFrom)
+    console.log(mintUpto)
     const allNft = []
-    for (let i = 1; i < totalSupply; i++) {
+    for (let i = mintFrom; i < mintUpto+1 ; i++) {
         const url = baseUrl + getUrl(i);
         const response = await fetch(url)
         const data = await response.json()
@@ -38,7 +40,9 @@ export const ipfsDataSlice = createSlice({
         allNftData: [],
         singleNftData:{},
         allowAdminAddress: [
-            "0xa7A7cc05b7b1Bb9a91B330A83A7A4888C8Cd04F4"
+            "0xa7A7cc05b7b1Bb9a91B330A83A7A4888C8Cd04F4",
+            "0xe36051f8bF9498D2Ac7506D8cc40DB60D6E70571",
+
     ]
     },
     extraReducers: (builder) => {

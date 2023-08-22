@@ -9,6 +9,9 @@ import { getMerkleRoot } from '../../../slices/contractGetterSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { allowPaidMinting, deployContract, setMerkleRoot, whitelistMinting, setSpecialPriceFunc, specialMinting, setCurrentNftPriceFunc } from '../../../slices/contractSetterSlice';
 import AlertComponent from '../../../sharedComponent/Alert';
+import Papa from 'papaparse';
+import { MerkleTree } from "merkletreejs"
+import { keccak256 } from "keccak256"
 
 const Hack = () => {
   const dispatch = useDispatch()
@@ -24,6 +27,7 @@ const Hack = () => {
   const [updateCurrentNftprice, setUpdateCurrentNftPrice] = useState("");
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
+  const [rootHash, setRootHash] = useState("");
 
 
 
@@ -134,6 +138,26 @@ const Hack = () => {
 
   }
 
+  const handleUploadCsv = (event) => {
+    console.log("first")
+
+    const file = event.target.files[0];
+    Papa.parse(file, {
+      complete: (results) => {
+        const data = results.data;
+        const result = data.flat();
+        
+        const leafNodes = result.map(addr => keccak256(addr));
+        console.log(leafNodes)
+
+        const merkleTree = new MerkleTree(leafNodes, keccak256, { sortPairs: true });
+
+        const rootHash = merkleTree.getHexRoot();
+        setRootHash(rootHash)
+      }
+    })
+  }
+
 
 
 
@@ -163,8 +187,23 @@ const Hack = () => {
               {merkleRoot ? (<Typography variant='span' sx={{ fontFamily: "Roboto", fontSize: "18px", color: "#747474", letterSpacing: "0.6px", overflowWrap: "break-word" }}>{merkleRoot} </Typography>) : null}
             </Box>
             <div className='flex mb-3'>
-              <div className="block mb-2 text-sm font-medium text-black " for="file_input">Upload CSV File</div>
-              <input className="block w-full text-sm text-gray-900 border border-[#4340DA] rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file" accept=".csv"/>
+              <div className="block mb-2 text-sm font-medium text-black " for="file_input" >Upload CSV File</div>
+              {/* <input
+                type="file"
+                name="file"
+                className="custom-file-input"
+                id="exampleInputFile"
+                required
+                onChange={handleUploadCsv}
+              /> */}
+
+              <input
+                type="file"
+                name="file"
+                id="exampleInputFile"
+                className="block w-full text-sm text-gray-900 border border-[#4340DA] rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                onChange={handleUploadCsv} />
+              {rootHash ? (<Typography variant='span' sx={{ fontFamily: "Roboto", fontSize: "18px", color: "#747474", letterSpacing: "0.6px", overflowWrap: "break-word" }}>{rootHash} </Typography>) : null}
             </div>
 
 

@@ -10,7 +10,7 @@ import { metaMaskWallet } from "@rainbow-me/rainbowkit/wallets";
 const { chains, publicClient } = configureChains(
     [polygon, polygonMumbai],
     [
-        alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
+        alchemyProvider({ apiKey: "5JOLBM2ur8GdBO2a9lftNFppgUb6rRPa" }),
         publicProvider()
     ]
 );

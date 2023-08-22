@@ -14,6 +14,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { IconButton } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllNftData } from "../../../slices/ipfsData";
+import { getContractGetterFunc } from "../../../slices/contractGetterSlice";
 
 const Profile = () => {
   const { address, isConnected } = useAccount();
@@ -29,6 +30,11 @@ const Profile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { allNftData, isLoading } = useSelector((state) => state.custom);
+  const { mintFrom,mintUpto } = useSelector((state) => state.getterFunc);
+
+  const [mintFromNfts, setMintFromNfts] = useState(null);
+  const [mintUptoNfts, setMintUptoNfts] = useState(null);
+
   const handleClick = (buttonName) => {
     setActiveButton(buttonName);
   };
@@ -79,7 +85,19 @@ const Profile = () => {
   getBlockChainDetails(address);
 
   useEffect(() => {
-    dispatch(getAllNftData());
+    dispatch(getContractGetterFunc())
+      .then(() => setMintFromNfts(mintFrom))
+      .then(() => setMintUptoNfts(mintUpto));
+  }, [dispatch,mintFrom,mintUpto]);
+  useEffect(() => {
+    if ((mintUptoNfts, mintFromNfts)) {
+      dispatch(
+        getAllNftData({ mintFrom: mintFromNfts, mintUpto: mintUptoNfts })
+      );
+    }
+  }, [mintUptoNfts, mintFromNfts]);
+  useEffect(() => {
+   
     if (isConnected && mintedMan.length > 0) {
       setMintAllowed(true);
     } 
@@ -365,8 +383,8 @@ const Profile = () => {
                 <div key={index} className="col-md-4 col-lg-3 col-sm-6 ">
                   <div className="collection_small_box">
                     <Link to={`/product-details/${item.id}`}>
-                      <img
-                        src={`https://zuraverse.infura-ipfs.io/ipfs/QmXkfGFHUy7uMbi9priDj5rE2VjGGnYx55Xnjegb4YVTMn/${item.id}.jpg`}
+                    <img
+                        src={`https://ipfs.io/ipfs/bafybeibjgjp45yynomskvrfd3dsvphdmvtx6ssajnqigvinz2xuqmy4c4e/${item.edition}.jpg`}
                         alt=""
                         className="img-fluid DP_img"
                       />
