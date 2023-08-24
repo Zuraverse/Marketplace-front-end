@@ -12,6 +12,7 @@ import AlertComponent from '../../../sharedComponent/Alert';
 import Papa from 'papaparse';
 import { MerkleTree } from "merkletreejs"
 import { keccak256 } from "keccak256"
+import { utils, ethers } from "ethers"
 
 const Hack = () => {
   const dispatch = useDispatch()
@@ -146,11 +147,11 @@ const Hack = () => {
       complete: (results) => {
         const data = results.data;
         const result = data.flat();
-        
-        const leafNodes = result.map(addr => keccak256(addr));
+
+        const leafNodes = result.map(addr => utils.keccak256(utils.toUtf8Bytes(addr)));
         console.log(leafNodes)
 
-        const merkleTree = new MerkleTree(leafNodes, keccak256, { sortPairs: true });
+        const merkleTree = new MerkleTree(leafNodes, utils.keccak256, { sortPairs: true });
 
         const rootHash = merkleTree.getHexRoot();
         setRootHash(rootHash)

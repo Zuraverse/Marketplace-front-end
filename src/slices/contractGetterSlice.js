@@ -14,7 +14,7 @@ if (typeof window.ethereum !== 'undefined') {
 }
 
 const signer = provider.getSigner();
-let contractAddress = "0xB9c96EC68Ef993c817513ca0d6009d0f093Ac609"
+let contractAddress = "0x5698e3485aA0C020B34e4A18b3cb0bf4a5f90Bcc"
 let contract = new ethers.Contract(contractAddress, abi, signer);
 
 export const getContractGetterFunc = createAsyncThunk('contract/getValue', async (address) => {

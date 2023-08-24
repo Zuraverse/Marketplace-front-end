@@ -7,7 +7,7 @@ const getUrl = (id) => {
     return
 }
 
-export const getAllNftData = createAsyncThunk("getAllNftData", async ({mintFrom,mintUpto }) => {
+export const getAllNftData = createAsyncThunk("getAllNftData", async ({mintFrom,mintUpto,pageNo }) => {
     const baseUrl = "https://bafybeibcm4jp3cdchok6wf2t4jyx3g2qljavnpsjmq3ip3fednayle4yoy.ipfs.dweb.link/";
     // const totalSupply = 20
     console.log(mintFrom)

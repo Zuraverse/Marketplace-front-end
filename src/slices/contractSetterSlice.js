@@ -15,7 +15,7 @@ if (typeof window.ethereum !== 'undefined') {
     provider = new ethers.providers.JsonRpcProvider();
 }
 const signer = provider.getSigner();
-const contractAddress = "0xB9c96EC68Ef993c817513ca0d6009d0f093Ac609"
+const contractAddress = "0x5698e3485aA0C020B34e4A18b3cb0bf4a5f90Bcc"
 const contract = new ethers.Contract(contractAddress, abi, signer);
 
 

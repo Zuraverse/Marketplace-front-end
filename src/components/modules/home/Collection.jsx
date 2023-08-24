@@ -35,6 +35,8 @@ const Collection = () => {
   const [mintFromNfts, setMintFromNfts] = useState(null);
   const [mintUptoNfts, setMintUptoNfts] = useState(null);
 
+  const [pageNo, setPageNo] = useState(1);
+
   const dispatch = useDispatch();
   const { allNftData } = useSelector((state) => state.custom);
   const { currentBlockChainName } = useSelector((state) => state.utils);
@@ -55,14 +57,19 @@ const Collection = () => {
     dispatch(getContractGetterFunc())
       .then(() => setMintFromNfts(mintFrom))
       .then(() => setMintUptoNfts(mintUpto));
-  }, [dispatch,mintFrom,mintUpto]);
+  }, [dispatch, mintFrom, mintUpto]);
+
   useEffect(() => {
-    if ((mintUptoNfts, mintFromNfts)) {
+    if (mintUptoNfts !== null && mintFromNfts !== null) {
       dispatch(
-        getAllNftData({ mintFrom: mintFromNfts, mintUpto: mintUptoNfts })
+        getAllNftData({
+          mintFrom: mintFromNfts,
+          mintUpto: mintUptoNfts,
+          pageNo,
+        })
       );
     }
-  }, [mintUptoNfts, mintFromNfts]);
+  }, [mintUptoNfts, mintFromNfts, pageNo]);
 
   useEffect(() => {
     if (isConnected) {
@@ -75,12 +82,16 @@ const Collection = () => {
     }
   }, [dispatch]);
 
-  console.log(mintFromNfts, mintUptoNfts);
-
   const handleMint = async (tokenId) => {
     await dispatch(getMerkleProof({ address }));
     handleMintNft({ tokenId, address, merkleProof });
   };
+
+  const itemsPerPage = 20;
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const startIndex = (pageNo - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const itemsToShow = filteredData.slice(startIndex, endIndex);
 
   return (
     <>
@@ -253,8 +264,8 @@ const Collection = () => {
           </div>
 
           <div className="row mt-5">
-            {filteredData.length > 0 &&
-              filteredData.map((item, index) => (
+            {itemsToShow.length > 0 &&
+              itemsToShow.map((item, index) => (
                 <div key={index} className="col-md-4 col-lg-3 col-sm-6 ">
                   <div className="collection_small_box">
                     <div className="collection_small_box_connect_wallet">
@@ -296,6 +307,53 @@ const Collection = () => {
                 </div>
               ))}
           </div>
+        </div>
+        <div className="pagination justify-content-center mt-5">
+          <ul className="pagination">
+            <li className={`page-item ${pageNo === 1 ? "disabled" : ""}`}>
+              <button
+                className="page-link bg-dark text-light"
+                onClick={() => setPageNo(pageNo - 1)}
+                disabled={pageNo === 1}
+              >
+                Previous
+              </button>
+            </li>
+
+            {Array.from({ length: 3 }, (_, index) => {
+              const pageNumber = index + pageNo;
+              return (
+                pageNumber >= 1 &&
+                pageNumber <= totalPages && (
+                  <li
+                    key={index}
+                    className={`page-item ${
+                      pageNo === pageNumber ? "active" : ""
+                    }`}
+                  >
+                    <button
+                      className="page-link bg-dark text-light"
+                      onClick={() => setPageNo(pageNumber)}
+                    >
+                      {pageNumber}
+                    </button>
+                  </li>
+                )
+              );
+            })}
+
+            <li
+              className={`page-item ${pageNo === totalPages ? "disabled" : ""}`}
+            >
+              <button
+                className="page-link bg-dark text-light"
+                onClick={() => setPageNo(pageNo + 1)}
+                disabled={pageNo === totalPages}
+              >
+                Next
+              </button>
+            </li>
+          </ul>
         </div>
       </section>
     </>
