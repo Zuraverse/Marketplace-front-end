@@ -10,6 +10,7 @@ import { useAccount } from 'wagmi';
 import { useEffect } from 'react';
 import { getContractGetterFunc } from './slices/contractGetterSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import KarmaPointPage from './components/KarmaPointPage';
 
 
 const AppRoutes = () => {
@@ -32,6 +33,7 @@ const AppRoutes = () => {
             <Route exact path="collection" element={<Collection />} />
             <Route exact path='profile' element={isConnected && (!allowAdminAddress.includes(address)) ? <Profile /> : <Navigate to="/" replace />} />
             <Route exact path="product-details/:id" element={<ProductDetails />} />
+            <Route exact path="karma" element={<KarmaPointPage/>} ></Route>
             <Route path="*" element={<p>There's nothing here!</p>} />
             </Route>
           <Route exact path='admin/:tab' element={isConnected && (allowAdminAddress.includes(address)) ? <AdminNavbar /> : <Navigate to="/" replace />} />

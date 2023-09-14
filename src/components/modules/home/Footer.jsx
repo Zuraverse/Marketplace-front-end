@@ -1,8 +1,14 @@
 import React from "react";
+import {Link} from 'react-router-dom'
 import logo from "../../../images/footer-logo.png";
 import "./footer.css";
+import { useLocation } from "react-router-dom";
 const Footer = () => {
+
+  const location = useLocation()
+
   return (
+    location.pathname !== '/karma' && (
     <div className="footer">
       <div className="footer-row">
         <div className="footer-row-logo">
@@ -16,6 +22,8 @@ const Footer = () => {
             <a href="#">Art</a>
             <a href="#">Gaming</a>
             <a href="#">PFPs</a>
+            {/* <a href="#"><Link to='/karma'>Karma Point</Link></a> */}
+            <Link to='/karma'>Karma Point</Link>
           </div>
           <div className="footer-row-column2-col">
             <h3>Company</h3>
@@ -44,6 +52,7 @@ const Footer = () => {
         <p>©2023 Zuraverse, All Rights Reserved.</p>
       </div>
     </div>
+    )
   );
 };
 

@@ -1,51 +1,151 @@
 body {
-    // background-color: black !important;
-    color: #fff !important;
-  }
+  // background-color: black !important;
+  color: #fff !important;
+}
 .btn-primary{
-  background: #394bf2;
-  color: #fff;
-  font-size: 24px;
-  border-radius: 4px;
-  margin-left: 32px;
-  padding: 5px 22px;
-  border: 2px solid #394bf2;
+background: #394bf2;
+color: #fff;
+font-size: 24px;
+border-radius: 4px;
+margin-left: 32px;
+padding: 5px 22px;
+border: 2px solid #394bf2;
 }
 .float-right{
-  float: right;
+float: right;
 }
 .notification-btn{
-  padding: 5px 10px;
+padding: 5px 10px;
 }
 .pr-4{
-  padding-right: 8px;
+padding-right: 8px;
 }
 .wallet-btn{
-  padding: 5px 10px;
+padding: 5px 10px;
 }
 @media only screen and (max-width: 600px){
-  .mintWrapper .mint-box p {
-    font-size: 22px;
+.mintWrapper .mint-box p {
+  font-size: 22px;
 }
-	.btn-primary{
-    margin-left:4px;
-   
-  }
-  .sm-hidden{
-    display: none;
-  }
-  .mintWrapper .mint-box .text-wrapper {
-    padding: 31px !important;
-  }
-  .mintWrapper .mint-box .btn-join {
-    background: #00000091;
+.btn-primary{
+  margin-left:4px;
+ 
+}
+.sm-hidden{
+  display: none;
+}
+.mintWrapper .mint-box .text-wrapper {
+  padding: 31px !important;
+}
+.mintWrapper .mint-box .btn-join {
+  background: #00000091;
 }
 .mintWrapper .mint-box h2 {
-  margin-top: 60px;
-  font-size: 39px;
+margin-top: 60px;
+font-size: 39px;
 }
 }
 .btn-success{
-  margin-left: 30px !important;
- 
+margin-left: 30px !important;
+
+}
+.black-text {
+color: black;
+padding-right: 31;
+
+}
+
+.center-box {
+width: 900px; /* Set your desired width */
+height: 150px; /* Set your desired height */
+background-color: #c86bec; /* Set your desired background color */
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+border: 2px solid #dbf1f0; /* Set your desired border style and color */
+box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Add a shadow if desired */
+/* Add additional styles as needed */
+}
+
+.text-box {
+width: 900px;
+height: 50px;
+top: 70%;
+background-color: #dbf1f0;
+border: 2px
+}
+
+.black-background {
+background-color: black;
+height: 100vh;
+width: 100vw;
+}
+
+.background {
+background-color: #100211;
+padding: 20px;
+}
+
+.center-box {
+height: 200px;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+margin: 20px;
+padding: 20px;
+border-radius: 10px;
+background-color: #edf765;
+box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.text {
+color: #333333;
+font-family: 'Roboto', sans-serif;
+margin-bottom: 20px;
+}
+
+.form {
+display: flex;
+flex-direction: column;
+width: 100%;
+}
+
+.input {
+padding: 10px;
+border-radius: 5px;
+border: 1px solid #cccccc;
+margin-bottom: 10px;
+}
+
+.btn {
+padding: 10px;
+border-radius: 5px;
+border: 2px solid black; /* Add black border */
+background-color: #007BFF;
+color: #ffffff;
+font-weight: bold; /* Make text bold */
+cursor: pointer;
+transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+background-color: #0056b3;
+}
+
+.heading-style {
+  color: black;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #F0F0F0
+}
+
+.error-text{
+color: red;
 }
