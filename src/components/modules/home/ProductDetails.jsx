@@ -11,6 +11,7 @@ import Tabs from "react-bootstrap/Tabs";
 import { useAccount } from "wagmi";
 import HeaderCommon from "./HeaderCommon";
 import { getSingleNftData } from "../../../slices/ipfsData";
+import { getMerkleProof } from "../../../slices/backened";
 
 const Completionist = () => <span>You are good to go!</span>;
 
@@ -53,6 +54,7 @@ const renderer = ({ days, hours, minutes, seconds, completed }) => {
 const ProductDetails = () => {
   const { id } = useParams();
   const [show, setShow] = useState(false);
+  const [mintAllowed, setMintAllowed] = useState(false);
   const { address, isConnected } = useAccount();
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -60,9 +62,22 @@ const ProductDetails = () => {
   const dispatch = useDispatch();
   const { singleNftData } = useSelector((state) => state.custom);
 
+  const { merkleProof } = useSelector((state) => state.backenedFunc);
+  const whitelistedAddress = merkleProof.whitelistedAddress;
+
   useEffect(() => {
     dispatch(getSingleNftData(id));
-  }, [isConnected]);
+    // Check if merkleProof is not available, then fetch it
+    if (isConnected && !merkleProof.whitelistedAddress) {
+      dispatch(getMerkleProof({ address }));
+    }
+  }, [id, address, isConnected, dispatch, merkleProof.whitelistedAddress]);
+
+  useEffect(() => {
+    if (whitelistedAddress.length > 0) {
+      setMintAllowed(true);
+    }
+  }, [whitelistedAddress.length]);
 
   return (
     <>
@@ -106,9 +121,15 @@ const ProductDetails = () => {
                       renderer={renderer}
                     />
 
-                    <button className="MINT_NOW_button" onClick={handleShow}>
-                      MINT NOW
-                    </button>
+                    {mintAllowed ? (
+                      <button className="MINT_NOW_button" onClick={handleShow}>
+                        MINT NOW
+                      </button>
+                    ) : (
+                      <button className="MINT_NOW_button" onClick={handleShow}>
+                        No Whitelist
+                      </button>
+                    )}
                   </div>
                 </div>
                 <div className="col-md-8 col-sm-12">
@@ -213,7 +234,8 @@ const ProductDetails = () => {
                                       Background
                                     </h2>
                                     <p style={{ fontFamily: "Abel" }}>
-                                      {singleNftData.attributes && singleNftData.attributes[0].value}
+                                      {singleNftData.attributes &&
+                                        singleNftData.attributes[0].value}
                                     </p>
                                   </div>
                                 </div>
@@ -221,7 +243,8 @@ const ProductDetails = () => {
                                   <div className="products_tabs_div">
                                     <h2 style={{ fontFamily: "Abel" }}>BASE</h2>
                                     <p style={{ fontFamily: "Abel" }}>
-                                    {singleNftData.attributes && singleNftData.attributes[1].value}
+                                      {singleNftData.attributes &&
+                                        singleNftData.attributes[1].value}
                                     </p>
                                   </div>
                                 </div>
@@ -231,7 +254,8 @@ const ProductDetails = () => {
                                       Mouth{" "}
                                     </h2>
                                     <p style={{ fontFamily: "Abel" }}>
-                                    {singleNftData.attributes && singleNftData.attributes[2].value}
+                                      {singleNftData.attributes &&
+                                        singleNftData.attributes[2].value}
                                     </p>
                                   </div>
                                 </div>
@@ -241,7 +265,8 @@ const ProductDetails = () => {
                                       Headwear
                                     </h2>
                                     <p style={{ fontFamily: "Abel" }}>
-                                    {singleNftData.attributes && singleNftData.attributes[3].value}
+                                      {singleNftData.attributes &&
+                                        singleNftData.attributes[3].value}
                                     </p>
                                   </div>
                                 </div>
@@ -249,7 +274,8 @@ const ProductDetails = () => {
                                   <div className="products_tabs_div">
                                     <h2 style={{ fontFamily: "Abel" }}>Eye</h2>
                                     <p style={{ fontFamily: "Abel" }}>
-                                    {singleNftData.attributes && singleNftData.attributes[4].value}
+                                      {singleNftData.attributes &&
+                                        singleNftData.attributes[4].value}
                                     </p>
                                   </div>
                                 </div>

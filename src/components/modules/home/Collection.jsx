@@ -7,7 +7,6 @@ import { BsFillGrid3X3GapFill, BsGridFill } from "react-icons/bs";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useAccount } from "wagmi";
 import HeaderCommon from "./HeaderCommon";
-import { mintAddress } from "../../../blockchain/contractDetails";
 import { getAllNftData } from "../../../slices/ipfsData";
 import { getBalance, getBlockChainName } from "../../../slices/utilsSilce";
 import WagmiUtils from "../../../blockchain/wagmiUtils";
@@ -25,10 +24,11 @@ const Collection = () => {
   const { address, isConnected } = useAccount();
   const [mintAllowed, setMintAllowed] = useState(false);
   // const [merkleRoot1, setMerkleRoot1] = useState("");
-  const mintedMan = mintAddress.filter((obj) => obj.address1 === address);
 
   const { mintFrom, mintUpto } = useSelector((state) => state.getterFunc);
+
   const { merkleProof } = useSelector((state) => state.backenedFunc);
+  const { whitelistedAddress, proof } = merkleProof;
 
   const [activeButton, setActiveButton] = useState("button1");
   const [searchTerm, setSearchTerm] = useState("");
@@ -77,14 +77,22 @@ const Collection = () => {
       dispatch(getBalance(address));
       dispatch(getMerkleRoot());
     }
-    if (isConnected && mintedMan.length > 0) {
+  }, [dispatch, address, isConnected]);
+
+  useEffect(() => {
+    if (isConnected && address) {
+      dispatch(getMerkleProof({ address }));
+    }
+  }, [dispatch, address, isConnected]);
+
+  useEffect(() => {
+    if (whitelistedAddress.length > 0) {
       setMintAllowed(true);
     }
-  }, [dispatch]);
+  }, [whitelistedAddress.length]);
 
   const handleMint = async (tokenId) => {
-    await dispatch(getMerkleProof({ address }));
-    handleMintNft({ tokenId, address, merkleProof });
+    handleMintNft({ tokenId, address, proof });
   };
 
   const itemsPerPage = 20;
