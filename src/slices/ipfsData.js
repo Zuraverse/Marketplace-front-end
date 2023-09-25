@@ -51,6 +51,7 @@ export const ipfsDataSlice = createSlice({
     allowAdminAddress: [
       "0xa7A7cc05b7b1Bb9a91B330A83A7A4888C8Cd04F4",
       "0xe36051f8bF9498D2Ac7506D8cc40DB60D6E70571",
+      "0x721A6D070Fb83Ff8Ab581D011467C1CCB6F4F399",
     ],
   },
   extraReducers: (builder) => {

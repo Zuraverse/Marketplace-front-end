@@ -89,7 +89,7 @@ const Collection = () => {
     if (whitelistedAddress.length > 0) {
       setMintAllowed(true);
     }
-  }, [whitelistedAddress.length]);
+  }, [whitelistedAddress.length, proof]);
 
   const handleMint = async (tokenId) => {
     handleMintNft({ tokenId, address, proof });
